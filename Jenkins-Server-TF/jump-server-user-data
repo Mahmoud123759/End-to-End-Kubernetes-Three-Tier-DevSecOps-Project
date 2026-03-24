@@ -1,0 +1,58 @@
+#!/bin/bash
+set -euo pipefail
+
+echo "=============================="
+echo "Updating system packages..."
+echo "=============================="
+sudo apt update -y
+sudo apt install -y curl unzip tar snapd
+
+echo "=============================="
+echo "Installing Helm..."
+echo "=============================="
+if ! command -v helm &> /dev/null; then
+    sudo snap install helm --classic
+else
+    echo "Helm already installed: $(helm version --short)"
+fi
+
+echo "=============================="
+echo "Installing eksctl..."
+echo "=============================="
+if ! command -v eksctl &> /dev/null; then
+    EKSCTL_URL=$(curl -s https://api.github.com/repos/weaveworks/eksctl/releases/latest | grep browser_download_url | grep linux_amd64.tar.gz | cut -d '"' -f 4)
+    curl -sL "$EKSCTL_URL" | tar xz -C /tmp
+    sudo mv /tmp/eksctl /usr/local/bin/
+else
+    echo "eksctl already installed: $(eksctl version)"
+fi
+eksctl version
+
+echo "=============================="
+echo "Installing kubectl..."
+echo "=============================="
+if ! command -v kubectl &> /dev/null; then
+    K8S_VERSION=$(curl -s https://dl.k8s.io/release/stable.txt)
+    curl -LO "https://dl.k8s.io/release/${K8S_VERSION}/bin/linux/amd64/kubectl"
+    chmod +x kubectl
+    sudo mv kubectl /usr/local/bin/
+else
+    echo "kubectl already installed: $(kubectl version --client --short)"
+fi
+kubectl version --client
+
+echo "=============================="
+echo "Installing AWS CLI v2..."
+echo "=============================="
+if ! command -v aws &> /dev/null; then
+    curl -s "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    unzip -q awscliv2.zip
+    sudo ./aws/install
+    rm -rf awscliv2.zip aws
+else
+    echo "AWS CLI already installed: $(aws --version)"
+fi
+
+echo "=============================="
+echo "All tools installed successfully!"
+echo "=============================="
