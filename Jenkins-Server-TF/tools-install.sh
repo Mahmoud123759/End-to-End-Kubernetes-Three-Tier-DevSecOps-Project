@@ -5,7 +5,7 @@ sudo apt update -y
 sudo apt install openjdk-17-jre -y
 sudo apt install openjdk-17-jdk -y
 java --version
-
+# installing jenkins
 #!/bin/bash
 sudo apt update -y
 sudo apt upgrade -y
