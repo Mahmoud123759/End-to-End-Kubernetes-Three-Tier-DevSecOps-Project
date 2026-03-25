@@ -11,4 +11,4 @@ COPY . .
 RUN useradd -m appuser
 USER appuser
 
-CMD ["node", "index.js"] ]
+CMD ["node", "index.js"] 
