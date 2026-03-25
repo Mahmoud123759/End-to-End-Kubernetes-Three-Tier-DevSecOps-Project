@@ -39,6 +39,7 @@ pipeline {
                 }
             }
         }
+/*
         stage('OWASP Dependency-Check Scan') {
             steps {
                 dir('Application-Code/frontend') {
@@ -47,13 +48,14 @@ pipeline {
                 }
             }
         }
-        #stage('Trivy File Scan') {
-            #steps {
-                #dir('Application-Code/frontend') {
-                   # sh 'trivy fs . > trivyfs.txt'
-               # }
-           # }
-        #}
+*/
+        stage('Trivy File Scan') {
+            steps {
+                dir('Application-Code/frontend') {
+                    sh 'trivy fs . > trivyfs.txt'
+                }
+            }
+        }
         stage("Docker Image Build") {
             steps {
                 script {
