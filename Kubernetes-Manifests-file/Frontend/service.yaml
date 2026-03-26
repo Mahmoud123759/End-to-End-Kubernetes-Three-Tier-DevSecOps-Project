@@ -4,7 +4,7 @@ metadata:
   name: frontend
 spec:
   selector:
-    app: frontend
+    role: frontend
   ports:
     - protocol: TCP
       port: 3000       # البورت اللي هتستخدمه داخل cluster
