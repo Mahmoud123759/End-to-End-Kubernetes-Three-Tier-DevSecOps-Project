@@ -118,18 +118,17 @@ jobs:
           docker build -t $BACKEND_ECR_REPO_NAME .
           docker tag $BACKEND_ECR_REPO_NAME $BACKEND_REPOSITORY_URI:${{ github.run_number }}
           docker push $BACKEND_REPOSITORY_URI:${{ github.run_number }}
-
       # 1️⃣2️⃣ Trivy Image Scan
       - name: Trivy Image Scan Frontend
         uses: aquasecurity/trivy-action@v0.20.0
         with:
-          image-ref: $FRONTEND_REPOSITORY_URI:${{ github.run_number }}
+          image-ref: ${{ env.FRONTEND_REPOSITORY_URI }}:${{ github.run_number }}
           output: 'trivy-frontend-image.txt'
 
       - name: Trivy Image Scan Backend
         uses: aquasecurity/trivy-action@v0.20.0
         with:
-          image-ref: $BACKEND_REPOSITORY_URI:${{ github.run_number }}
+          image-ref: ${{ env.BACKEND_REPOSITORY_URI }}:${{ github.run_number }}
           output: 'trivy-backend-image.txt'
 
       # 1️⃣3️⃣ Update Deployment YAML
